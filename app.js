@@ -1,5 +1,6 @@
 const FEED_URL = "https://artist-visual-archive.estifo-mtk.chatgpt.site/api/public/artworks";
 const STORAGE_KEY = "nocturne-saved";
+const OWNER_STUDIO_KEY = "versigor-owner-studio";
 
 const fallbackArtworks = [
   { id: "night-blocks", title: "Night Blocks", category: "Works", year: "2026", medium: "Mixed media", description: "A layered study in cobalt, charcoal, and raw plaster.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-02-night-blocks.webp", shape: "wide", featured: true },
@@ -35,6 +36,34 @@ function readSaved() {
 
 function writeSaved() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.saved));
+}
+
+function initializeOwnerStudio() {
+  const studioLink = document.querySelector("[data-owner-studio]");
+  if (!studioLink) return;
+
+  const url = new URL(window.location.href);
+  let ownerToolsEnabled = false;
+
+  try {
+    if (url.searchParams.get("owner") === "1") {
+      localStorage.setItem(OWNER_STUDIO_KEY, "enabled");
+      ownerToolsEnabled = true;
+      url.searchParams.delete("owner");
+      window.history.replaceState(
+        {},
+        "",
+        `${url.pathname}${url.search}${url.hash}`,
+      );
+    } else {
+      ownerToolsEnabled =
+        localStorage.getItem(OWNER_STUDIO_KEY) === "enabled";
+    }
+  } catch {
+    ownerToolsEnabled = url.searchParams.get("owner") === "1";
+  }
+
+  studioLink.hidden = !ownerToolsEnabled;
 }
 
 function bookmarkIcon(filled) {
@@ -180,6 +209,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+initializeOwnerStudio();
 renderFeatured();
 renderGallery();
 loadLiveArchive();
