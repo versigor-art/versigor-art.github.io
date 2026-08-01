@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nocturne Archive by Versigor</title>
+    <meta
+      name="description"
+      content="Explore works, drafts, studies, and illustrations by Versigor, an Addis Ababa-based visual artist and graphic designer."
+    />
+    <meta
+      name="keywords"
+      content="Versigor, Estifanos Mitiku, Ethiopian visual artist, Addis Ababa artist, graphic design portfolio, illustration portfolio, art studies, Nocturne Archive"
+    />
+    <meta name="author" content="Versigor" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta
+      name="google-site-verification"
+      content="eIqKy28-ZLPSy0hxk9mOAE2Gt0avYRHVWye45Fm_JIg"
+    />
+    <link rel="canonical" href="https://versigor-art.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nocturne Archive by Versigor" />
+    <meta property="og:title" content="Nocturne Archive by Versigor" />
+    <meta
+      property="og:description"
+      content="A living archive of visual works, drafts, studies, and illustrations."
+    />
+    <meta property="og:url" content="https://versigor-art.github.io/" />
+    <meta
+      property="og:image"
+      content="https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-02-night-blocks.webp"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nocturne Archive by Versigor" />
+    <meta
+      name="twitter:description"
+      content="A living archive of visual works, drafts, studies, and illustrations."
+    />
+    <meta
+      name="twitter:image"
+      content="https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-02-night-blocks.webp"
+    />
+    <meta name="theme-color" content="#0b0b0d" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Nocturne Archive by Versigor",
+        "url": "https://versigor-art.github.io/",
+        "description": "A living visual archive of works, drafts, studies, and illustrations by Versigor.",
+        "creator": {
+          "@type": "Person",
+          "name": "Versigor",
+          "alternateName": "Estifanos Mitiku",
+          "jobTitle": "Visual Artist and Graphic Designer",
+          "homeLocation": {
+            "@type": "Place",
+            "name": "Addis Ababa, Ethiopia"
+          }
+        }
+      }
+    </script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main id="top">
+      <header class="site-header">
+        <a href="#top" class="wordmark" aria-label="Versigor home">Versigor</a>
+        <nav aria-label="Primary navigation">
+          <a href="#archive">Archive</a>
+          <button type="button" data-open-about>About</button>
+        </nav>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Independent visual artist · Addis Ababa</p>
+          <h1 id="hero-title">
+            A <em>living</em> archive<br />
+            of works,<br />
+            <em>drafts &amp; studies.</em>
+          </h1>
+          <p class="hero-note">
+            Finished pieces, unfinished thoughts, and everything in between.
+          </p>
+        </div>
+
+        <button class="featured-art" type="button" data-featured aria-label="View featured artwork">
+          <img data-featured-image src="https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-02-night-blocks.webp" alt="Night Blocks abstract artwork" />
+          <span class="featured-caption">
+            <span data-featured-title>Night Blocks</span>
+            <span data-featured-detail>Mixed media · 2026</span>
+          </span>
+        </button>
+      </section>
+
+      <section class="archive-section" id="archive" aria-labelledby="archive-title">
+        <div class="archive-topline">
+          <p id="archive-title">Archive / <span data-count>06</span></p>
+          <p>Scroll to explore</p>
+        </div>
+
+        <div class="filters" aria-label="Filter artwork">
+          <button type="button" class="active" data-filter="All" aria-pressed="true">All</button>
+          <button type="button" data-filter="Works" aria-pressed="false">Works</button>
+          <button type="button" data-filter="Drafts" aria-pressed="false">Drafts</button>
+          <button type="button" data-filter="Studies" aria-pressed="false">Studies</button>
+          <button type="button" data-filter="Illustration" aria-pressed="false">Illustration</button>
+          <button type="button" data-filter="Saved" aria-pressed="false">Saved <sup data-saved-count></sup></button>
+        </div>
+
+        <div class="art-grid" data-gallery aria-live="polite"></div>
+        <div class="empty-state" data-empty hidden>
+          <p>No pieces here yet.</p>
+          <button type="button" data-show-all>Return to the full archive</button>
+        </div>
+      </section>
+
+      <footer>
+        <p>Selected visual notes, 2024—2026</p>
+        <a href="#top">Back to top ↑</a>
+      </footer>
+    </main>
+
+    <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="Artwork viewer" hidden>
+      <button class="close-button" type="button" data-close-lightbox>Close</button>
+      <div class="lightbox-inner">
+        <img data-lightbox-image src="" alt="" />
+        <div class="lightbox-meta">
+          <div>
+            <p data-lightbox-title></p>
+            <p data-lightbox-detail></p>
+            <p class="art-description" data-lightbox-description></p>
+          </div>
+          <button type="button" data-lightbox-save></button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="about-panel" data-about role="dialog" aria-modal="true" hidden>
+      <button class="close-button" type="button" data-close-about>Close</button>
+      <div>
+        <p class="eyebrow">About the archive</p>
+        <h2>Work before it becomes certain.</h2>
+        <p>
+          This is an evolving collection of visual experiments, finished pieces,
+          rough drafts, and studies by Versigor. It is less a catalogue than a
+          window into the process.
+        </p>
+      </div>
+    </aside>
+
+    <noscript>
+      <p class="noscript">Please enable JavaScript to browse the visual archive.</p>
+    </noscript>
+  </body>
+</html>
