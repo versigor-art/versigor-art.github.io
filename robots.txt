@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://versigor-art.github.io/sitemap.xml

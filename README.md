@@ -1,1 +1,0 @@
-# versigor-art.github.io
