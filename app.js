@@ -2,14 +2,7 @@ const FEED_URL = "https://artist-visual-archive.estifo-mtk.chatgpt.site/api/publ
 const STORAGE_KEY = "nocturne-saved";
 const OWNER_STUDIO_KEY = "versigor-owner-studio";
 
-const fallbackArtworks = [
-  { id: "night-blocks", title: "Night Blocks", category: "Works", year: "2026", medium: "Mixed media", description: "A layered study in cobalt, charcoal, and raw plaster.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-02-night-blocks.webp", shape: "wide", featured: true },
-  { id: "cobalt-field", title: "Cobalt Field", category: "Studies", year: "2026", medium: "Paper & pigment", description: "An open paper field interrupted by black mass and a vertical cobalt gesture.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-01-cobalt-field.webp", shape: "tall", featured: false },
-  { id: "vermilion-study", title: "Vermilion Study", category: "Drafts", year: "2026", medium: "Pigment & graphite", description: "A raw collision of vermilion, graphite, and torn paper.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-03-vermilion-study.webp", shape: "square", featured: false },
-  { id: "indigo-horizon", title: "Indigo Horizon", category: "Works", year: "2025", medium: "Ink on paper", description: "A nocturnal ink landscape held together by a fine vermilion line.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-05-indigo-horizon.webp", shape: "wide", featured: false },
-  { id: "red-sun", title: "Red Sun", category: "Illustration", year: "2025", medium: "Screenprint study", description: "A screenprint-style horizon built from cobalt, vermilion, and torn paper.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-06-red-sun.webp", shape: "tall", featured: false },
-  { id: "structure-04", title: "Structure No. 04", category: "Studies", year: "2024", medium: "Graphite & ink", description: "An imagined brutalist structure drawn through loose construction lines.", image: "https://artist-visual-archive.estifo-mtk.chatgpt.site/artworks/artwork-04-structure-study.webp", shape: "wide", featured: false }
-];
+const fallbackArtworks = [];
 
 const state = {
   artworks: fallbackArtworks,
@@ -76,6 +69,17 @@ function escapeHtml(value) {
   return div.innerHTML;
 }
 
+function artworkTitle(artwork) {
+  return String(artwork?.title || "").trim() || "Untitled";
+}
+
+function artworkMeta(...values) {
+  return values
+    .map((value) => String(value || "").trim())
+    .filter(Boolean)
+    .join(" · ");
+}
+
 function filteredArtworks() {
   if (state.filter === "All") return state.artworks;
   if (state.filter === "Saved") return state.artworks.filter((artwork) => state.saved.includes(artwork.id));
@@ -84,14 +88,28 @@ function filteredArtworks() {
 
 function renderFeatured() {
   const featured = state.artworks.find((artwork) => artwork.featured) || state.artworks[0];
-  if (!featured) return;
   const button = document.querySelector("[data-featured]");
   const image = document.querySelector("[data-featured-image]");
+  const title = document.querySelector("[data-featured-title]");
+  const detail = document.querySelector("[data-featured-detail]");
+
+  if (!featured) {
+    button.hidden = true;
+    image.removeAttribute("src");
+    image.alt = "";
+    title.textContent = "";
+    detail.textContent = "";
+    button.onclick = null;
+    return;
+  }
+
+  const displayTitle = artworkTitle(featured);
+  button.hidden = false;
   image.src = featured.image;
-  image.alt = `${featured.title} abstract artwork`;
-  document.querySelector("[data-featured-title]").textContent = featured.title;
-  document.querySelector("[data-featured-detail]").textContent = `${featured.medium} · ${featured.year}`;
-  button.setAttribute("aria-label", `View ${featured.title}`);
+  image.alt = `${displayTitle} artwork`;
+  title.textContent = displayTitle;
+  detail.textContent = artworkMeta(featured.medium, featured.year);
+  button.setAttribute("aria-label", `View ${displayTitle}`);
   button.onclick = () => openArtwork(featured.id);
 }
 
@@ -105,12 +123,12 @@ function renderGallery() {
     const isSaved = state.saved.includes(artwork.id);
     return `<article class="art-card ${escapeHtml(artwork.shape)}" style="--delay:${index * 45}ms">
       <button class="art-open" type="button" data-open-art="${escapeHtml(artwork.id)}" aria-label="View ${escapeHtml(artwork.title)}">
-        <img src="${escapeHtml(artwork.image)}" alt="${escapeHtml(artwork.title)}, ${escapeHtml(artwork.medium.toLowerCase())} artwork" loading="lazy" />
+        <img src="${escapeHtml(artwork.image)}" alt="${escapeHtml(artworkTitle(artwork))} artwork" loading="lazy" />
       </button>
-      <button class="save-button ${isSaved ? "saved" : ""}" type="button" data-save-art="${escapeHtml(artwork.id)}" aria-label="${isSaved ? "Remove" : "Save"} ${escapeHtml(artwork.title)} ${isSaved ? "from saved" : "for later"}" aria-pressed="${isSaved}">
+      <button class="save-button ${isSaved ? "saved" : ""}" type="button" data-save-art="${escapeHtml(artwork.id)}" aria-label="${isSaved ? "Remove" : "Save"} ${escapeHtml(artworkTitle(artwork))} ${isSaved ? "from saved" : "for later"}" aria-pressed="${isSaved}">
         ${bookmarkIcon(isSaved)}
       </button>
-      <div class="art-meta"><span>${escapeHtml(artwork.title)}</span><span>${escapeHtml(artwork.category)} · ${escapeHtml(artwork.year)}</span></div>
+      <div class="art-meta"><span>${escapeHtml(artworkTitle(artwork))}</span><span>${escapeHtml(artworkMeta(artwork.category, artwork.year))}</span></div>
     </article>`;
   }).join("");
 
@@ -144,9 +162,9 @@ function openArtwork(id) {
   if (!artwork) return;
   state.selected = artwork;
   document.querySelector("[data-lightbox-image]").src = artwork.image;
-  document.querySelector("[data-lightbox-image]").alt = artwork.title;
-  document.querySelector("[data-lightbox-title]").textContent = artwork.title;
-  document.querySelector("[data-lightbox-detail]").textContent = `${artwork.medium} · ${artwork.year}`;
+  document.querySelector("[data-lightbox-image]").alt = artworkTitle(artwork);
+  document.querySelector("[data-lightbox-title]").textContent = artworkTitle(artwork);
+  document.querySelector("[data-lightbox-detail]").textContent = artworkMeta(artwork.medium, artwork.year);
   document.querySelector("[data-lightbox-description]").textContent = artwork.description || "";
   renderLightboxSave();
   lightbox.hidden = false;
@@ -185,13 +203,13 @@ async function loadLiveArchive() {
     const response = await fetch(FEED_URL, { headers: { Accept: "application/json" } });
     if (!response.ok) return;
     const data = await response.json();
-    if (Array.isArray(data.artworks) && data.artworks.length) {
+    if (Array.isArray(data.artworks)) {
       state.artworks = data.artworks;
       renderFeatured();
       renderGallery();
     }
   } catch {
-    // The six-piece built-in collection remains available if the live feed is offline.
+    // Keep the archive empty rather than showing outdated sample artwork.
   }
 }
 
